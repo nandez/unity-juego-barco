@@ -4,20 +4,31 @@ using UnityEngine;
 
 public class EnemyBaseController : MonoBehaviour
 {
-    [SerializeField] protected int maxHitPoints; // Indica los puntos de vida iniciales del enemigo.
-    [SerializeField] protected float speed; // Indica la velocidad de movimiento del enemigo.
-    [SerializeField] protected float turnSpeed; // Indica la velocidad de rotación del enemigo.
-    [SerializeField] protected string playerTag; // Indica el tag que se le asigna al jugador.
+    [Tooltip("Indica los puntos de vida iniciales del enemigo.")]
+    [SerializeField] protected int maxHitPoints;
+
+    [Tooltip("Indica la velocidad de movimiento del enemigo..")]
+    [SerializeField] protected float speed;
+
+    [Tooltip("Indica la velocidad de rotación del enemigo.")]
+    [SerializeField] protected float turnSpeed;
+
+    [Tooltip("Indica el tag que se le asigna al jugador.")]
+    [SerializeField] protected string playerTag;
 
 
     protected Transform player; // Referencia al jugador.
-    [SerializeField] protected int hitPoints; // Indica la vida actual del enemigo.
+    protected int hitPoints; // Indica la vida actual del enemigo.
 
     void Start()
     {
         Initialize();
     }
 
+    /// <summary>
+    /// Metodo que inicializa las variables del enemigo.
+    /// Puede sobreescribirse en las clases derivadas.
+    /// </summary>
     protected virtual void Initialize()
     {
         // Buscamos al jugador por su tag.
