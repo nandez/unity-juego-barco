@@ -6,80 +6,63 @@ using UnityEngine;
 public class ProjectileController : MonoBehaviour
 {
     public LayerMask ignoreLayer;
+
+    [Tooltip("Indica si se debe mostrar o no la trayectoria.")]
     public bool showTrajectory = true;
 
-    public int archLineCount = 50;
-    public float archCalcInterval = 0.2f;
-    public float archHeightLimit = 0;
-    [Range(0, 90)]
-    public float throwAngle = 45f;
-    public float shootRange = 200f;
+    [Tooltip("Indica la cantidad de puntos que se dibujarán en la trayectoria.")]
+    [SerializeField] protected int archLineCount = 50;
 
-    public float startLineWidth = 0.1f;
-    public float endLineWidth = 0.1f;
-    public Color startColor = Color.blue;
-    public Color endColor = Color.blue;
-    [Range(0, 1)] public float startAlpha = 0.7f;
-    [Range(0, 1)] public float endAlpha = 0.1f;
+    [Tooltip("Indica el intérvalo entre cada punto de la trayectoria.")]
+    [SerializeField] protected float archCalcInterval = 0.25f;
 
+    [Tooltip("Indica angulo de disparo.")]
+    [Range(0, 90)][SerializeField] protected float throwAngle = 35f;
 
+    private LineRenderer line; // Referencia al componente LineRenderer.
     private GameObject shootPoint;
-    private float spdVec;
+    private Vector3 shootDirection;
+    private float velocity;
     private List<GameObject> archObj = new List<GameObject>();
-    private Vector3 shootVec;
-    LineRenderer line;
+
 
     void Start()
     {
         line = GetComponent<LineRenderer>();
-        line.startWidth = endLineWidth;
-        line.endWidth = startLineWidth;
-        line.material = new Material(Shader.Find("Sprites/Default"));
-        Gradient gradient = new Gradient();
-        gradient.SetKeys(
-            new GradientColorKey[] { new GradientColorKey(endColor, 0.0f), new GradientColorKey(startColor, 1.0f) },
-            new GradientAlphaKey[] { new GradientAlphaKey(endAlpha, 0.0f), new GradientAlphaKey(startAlpha, 1.0f) }
-        );
-        line.colorGradient = gradient;
     }
 
     public void Fire(GameObject objPrefab, Vector3 hitPos, Transform firePoint)
     {
         shootPoint = firePoint.gameObject;
-        CheckVector(hitPos);
-        GameObject obj = Instantiate(objPrefab, shootPoint.transform.position, Quaternion.identity);
-        Rigidbody rig = obj.GetComponent<Rigidbody>();
-        Vector3 force = shootVec * rig.mass;
-        rig.AddForce(force, ForceMode.Impulse);
+        if (CheckVector(hitPos))
+        {
+            GameObject obj = Instantiate(objPrefab, shootPoint.transform.position, Quaternion.identity);
+            Rigidbody rig = obj.GetComponent<Rigidbody>();
+            Vector3 force = shootDirection * rig.mass;
+            rig.AddForce(force, ForceMode.Impulse);
+            Invoke(nameof(CleanTrajectory), 2f);
+        }
     }
 
-    private void CheckVector(Vector3 hitPos)
+    private bool CheckVector(Vector3 hitPos)
     {
+        velocity = CalculateVectorFromAngle(hitPos, throwAngle);
 
-        spdVec = CalculateVectorFromAngle(hitPos, throwAngle);
-        if (spdVec <= 0.0f)
-        {
-            Debug.Log("impossible hit point");
-            return;
-        }
+        if (velocity <= 0.0f)
+            return false;
 
-        shootVec = ConvertVectorToVector3(spdVec, throwAngle, hitPos);
-        if (showTrajectory)
-        {
-            DisplayTrajectory(hitPos);
-        }
-        else
-        {
-            ClearTrajectory();
-        }
+        shootDirection = ConvertVectorToVector3(velocity, throwAngle, hitPos);
 
+        DisplayTrajectory(hitPos);
+
+        return true;
     }
 
     private float CalculateVectorFromAngle(Vector3 pos, float angle)
     {
-        Vector2 shootPos = new Vector2(shootPoint.transform.position.x,
-            shootPoint.transform.position.z);
-        Vector2 hitPos = new Vector2(pos.x, pos.z);
+        var shootPos = new Vector2(shootPoint.transform.position.x, shootPoint.transform.position.z);
+        var hitPos = new Vector2(pos.x, pos.z);
+
         float x = Vector2.Distance(shootPos, hitPos);
         float g = Physics.gravity.y;
         float y0 = shootPoint.transform.position.y;
@@ -89,93 +72,80 @@ public class ProjectileController : MonoBehaviour
         float tan = Mathf.Tan(rad);
 
         float v0Sq = g * x * x / (2 * cos * cos * (y - y0 - x * tan));
-        if (v0Sq <= 0.0f)
-        {
-            return 0.0f;
-        }
-        return Mathf.Sqrt(v0Sq);
+        return v0Sq <= 0f ? 0f : Mathf.Sqrt(v0Sq);
     }
 
     private Vector3 ConvertVectorToVector3(float spdVec, float angle, Vector3 pos)
     {
-        Vector3 shootPos = shootPoint.transform.position;
-        Vector3 hitPos = pos;
-        shootPos.y = 0f;
-        hitPos.y = 0f;
+        var shootPos = new Vector3(shootPoint.transform.position.x, 0f, shootPoint.transform.position.z);
+        var hitPos = new Vector3(pos.x, 0f, pos.z);
 
-        Vector3 dir = (hitPos - shootPos).normalized;
-        Quaternion Rot3D = Quaternion.FromToRotation(Vector3.right, dir);
-        Vector3 vec = spdVec * Vector3.right;
-        vec = Rot3D * Quaternion.AngleAxis(angle, Vector3.forward) * vec;
+        var dir = (hitPos - shootPos).normalized;
+        var rot = Quaternion.FromToRotation(Vector3.right, dir);
+        var vec = rot * Quaternion.AngleAxis(angle, Vector3.forward) * (spdVec * Vector3.right);
 
         return vec;
     }
 
     private void DisplayTrajectory(Vector3 hitPos)
     {
-        foreach (GameObject obj in archObj)
-            Destroy(obj, 0f);
+        CleanTrajectory();
 
-        archObj.Clear();
-
-        float x;
-        float y = shootPoint.transform.position.y;
-        float y0 = y;
-        float g = Physics.gravity.y;
-        float rad = throwAngle * Mathf.Deg2Rad;
-        float cos = Mathf.Cos(rad);
-        float sin = Mathf.Sin(rad);
-        float time;
-
-        List<Vector3> archVerts = new List<Vector3>();
-        Vector3 shootPos3 = shootPoint.transform.position;
-        hitPos.y = shootPos3.y;
-        Vector3 dir = (hitPos - shootPos3).normalized;
-        float spd = spdVec;
-        Quaternion yawRot = Quaternion.FromToRotation(Vector3.right, dir);
-        RaycastHit hit;
-
-        for (int i = 0; y > 0; i++)
+        if (showTrajectory)
         {
-            time = archCalcInterval * i;
-            x = spd * cos * time;
-            y = spd * sin * time + y0 + g * time * time / 2;
-            archVerts.Add(new Vector3(x, y, 0));
-            archVerts[i] = yawRot * archVerts[i];
-            archVerts[i] = new Vector3(archVerts[i].x + shootPos3.x, archVerts[i].y, archVerts[i].z + shootPos3.z);
+            float x;
+            float y = shootPoint.transform.position.y;
+            float y0 = y;
+            float g = Physics.gravity.y;
+            float rad = throwAngle * Mathf.Deg2Rad;
+            float cos = Mathf.Cos(rad);
+            float sin = Mathf.Sin(rad);
+            float time;
 
-            if (i > 0)
+            hitPos.y = y;
+
+            var dir = (hitPos - shootPoint.transform.position).normalized;
+            Quaternion rot = Quaternion.FromToRotation(Vector3.right, dir);
+            RaycastHit hit;
+
+            var archPoints = new List<Vector3>();
+            for (int i = 0; y > 0; i++)
             {
-                if (Physics.Linecast(archVerts[i - 1], archVerts[i], out hit, ignoreLayer))
+                time = archCalcInterval * i;
+                x = velocity * cos * time;
+                y = velocity * sin * time + y0 + g * time * time / 2;
+
+                var newPoint = rot * new Vector3(x, y, 0);
+                newPoint = new Vector3(newPoint.x + shootPoint.transform.position.x, newPoint.y, newPoint.z + shootPoint.transform.position.z);
+                archPoints.Add(newPoint);
+
+                if (i > 0)
                 {
-                    archVerts[i] = hit.point;
-                    break;
+                    if (Physics.Linecast(archPoints[i - 1], archPoints[i], out hit, ignoreLayer))
+                    {
+                        archPoints[i] = hit.point;
+                        break;
+                    }
                 }
             }
+            int lineLength = archLineCount;
+            archPoints.Reverse();
+
+            if (archPoints.Count < lineLength)
+                lineLength = archPoints.Count;
+
+            line.positionCount = archPoints.Count - (archPoints.Count - lineLength);
+            line.SetPositions(archPoints.ToArray());
+            line.useWorldSpace = true;
         }
-        int lineLength = archLineCount;
-        archVerts.Reverse();
-
-        if (archVerts.Count < lineLength)
-            lineLength = archVerts.Count;
-
-        line.startWidth = endLineWidth;
-        line.endWidth = startLineWidth;
-        Gradient gradient = new Gradient();
-        gradient.SetKeys(
-            new GradientColorKey[] { new GradientColorKey(endColor, 0.0f), new GradientColorKey(startColor, 1.0f) },
-            new GradientAlphaKey[] { new GradientAlphaKey(endAlpha, 0.0f), new GradientAlphaKey(startAlpha, 1.0f) }
-        );
-        line.colorGradient = gradient;
-        line.positionCount = archVerts.Count - (archVerts.Count - lineLength);
-        line.SetPositions(archVerts.ToArray());
-        line.useWorldSpace = true;
     }
 
-    private void ClearTrajectory()
+    private void CleanTrajectory()
     {
         line.positionCount = 0;
         foreach (GameObject obj in archObj)
             Destroy(obj);
+
+        archObj.Clear();
     }
 }

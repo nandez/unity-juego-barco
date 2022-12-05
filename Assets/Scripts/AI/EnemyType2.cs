@@ -23,7 +23,7 @@ public class EnemyType2 : BaseEnemy
     void Update()
     {
         // Determinamos si el barco se encuentra huyendo.
-        isFleeing = currentHitPoints <= hitPoints * 0.25f;
+        isFleeing = hitPoints <= maxHitpoints * 0.25f;
 
         if (player != null)
         {

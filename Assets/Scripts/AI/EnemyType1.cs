@@ -12,8 +12,6 @@ public class EnemyType1 : BaseEnemy
     [Header("Attack Settings")]
     [SerializeField] protected float attackRange = 5f; //Indica la distancia a la que el enemigo ataca.
     [SerializeField] protected float attackCooldown = 5f; //Indica el tiempo de espera entre disparo y disparo.
-    [SerializeField] protected string playerLeftSideTag = "PlayerLeftSide"; //Indica el tag asignado al objeto que representa el lado izquierdo del jugador.
-    [SerializeField] protected string playerRightSideTag = "PlayerRightSide"; //Indica el tag asignado al objeto que representa el lado derecho del jugador.
 
     [Header("Cannon Settings")]
     [SerializeField] protected GameObject cannonBallPrefab;
@@ -49,6 +47,13 @@ public class EnemyType1 : BaseEnemy
 
         // Actualizamos el cooldown de ataque.
         attackTimer -= Time.deltaTime;
+
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            hitPoints -= 5;
+            healthBarCtrl.UpdateHealthBar(hitPoints, maxHitpoints);
+        }
     }
 
     private void Attack()

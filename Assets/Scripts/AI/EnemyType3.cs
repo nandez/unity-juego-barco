@@ -27,11 +27,6 @@ public class EnemyType3 : BaseEnemy
         }
     }
 
-    void Attack()
-    {
-        // TODO: implementar el ataque...
-    }
-
     void FleeFromPlayer()
     {
         // Calculamos el vector dirección entre el enemigo y el jugador.
@@ -51,8 +46,7 @@ public class EnemyType3 : BaseEnemy
 
     void OnDrawGizmos()
     {
-        // Dibujamos el rango de ataque..
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, fleeRange);
     }
 }
