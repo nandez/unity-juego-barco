@@ -37,9 +37,7 @@ public class BaseEnemy : MonoBehaviour
     protected virtual void Initialize()
     {
         // Buscamos al jugador en la escena; si no lo encontramos, tiramos un error..
-        player = GameObject.FindObjectOfType<PlayerMovementController>()?.gameObject;
-        if (player == null)
-            throw new System.Exception($"No se encontró al jugador en la escena.");
+        player = SceneUtils.FindPlayer(true);
 
         // Inicializamos las referencias a los componentes que controla los puntos de vida
         // y asignamos los handlers para los eventos.
