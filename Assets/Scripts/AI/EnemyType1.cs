@@ -12,6 +12,7 @@ public class EnemyType1 : BaseEnemy
     [Header("Attack Settings")]
     [SerializeField] protected float attackRange = 5f; //Indica la distancia a la que el enemigo ataca.
     [SerializeField] protected float attackCooldown = 5f; //Indica el tiempo de espera entre disparo y disparo.
+    [SerializeField] protected int baseDamage = 10;
 
     [Header("Cannon Settings")]
     [SerializeField] protected GameObject cannonBallPrefab;
@@ -48,12 +49,9 @@ public class EnemyType1 : BaseEnemy
         // Actualizamos el cooldown de ataque.
         attackTimer -= Time.deltaTime;
 
-
+        // TODO: testing - quitar código de prueba.
         if (Input.GetKeyDown(KeyCode.Space))
-        {
-            hitPoints -= 5;
-            healthBarCtrl.UpdateHealthBar(hitPoints, maxHitpoints);
-        }
+            healthCtrl.TakeDamage(5);
     }
 
     private void Attack()
@@ -115,7 +113,7 @@ public class EnemyType1 : BaseEnemy
                 // Calculamos la dirección de disparo y llamamos al controlador de proyectiles
                 // para disparar la bala de cañon.
                 landPoint = player.transform.position + (player.transform.forward * Random.Range(0, 2f));
-                projectileCtrl.Fire(cannonBallPrefab, landPoint, cannonSpawnPoint);
+                projectileCtrl.Fire(cannonBallPrefab, landPoint, cannonSpawnPoint, baseDamage);
 
                 // Reiniciamos el cooldown.
                 attackTimer = attackCooldown;

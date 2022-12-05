@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BaseEnemy : MonoBehaviour, IDamageable
+public class BaseEnemy : MonoBehaviour
 {
-    [Tooltip("Indica los puntos de vida iniciales del enemigo.")]
-    [SerializeField] protected int maxHitpoints;
+    [Header("Enemy Settings")]
 
     [Tooltip("Indica la velocidad de movimiento del enemigo..")]
     [SerializeField] protected float speed;
@@ -17,11 +16,14 @@ public class BaseEnemy : MonoBehaviour, IDamageable
     [Tooltip("Indica los puntos de recompensa que otorga el enemigo al ser destruido..")]
     [SerializeField] protected int rewardPoints;
 
-    public UnityAction<int> OnDeath;
 
+    [Header("Events")]
+    public UnityAction<int> OnEnemyDestroyed; // Evento que se invoca cuando el enemigo es destruido.
+
+    protected HealthController healthCtrl; // Referencia al controlador de vida.
     protected HealthBarController healthBarCtrl; // Referencia al controlador de la barra de vida.
     protected GameObject player; // Referencia al jugador.
-    protected int hitPoints; // Indica la vida actual del enemigo.
+
 
     void Start()
     {
@@ -39,27 +41,28 @@ public class BaseEnemy : MonoBehaviour, IDamageable
         if (player == null)
             throw new System.Exception($"No se encontró al jugador en la escena.");
 
-        // Inicializamos las referencias a los componentes.
+        // Inicializamos las referencias a los componentes que controla los puntos de vida
+        // y asignamos los handlers para los eventos.
         healthBarCtrl = GetComponentInChildren<HealthBarController>();
-
-        // Inicializamos los puntos de vida.
-        hitPoints = maxHitpoints;
-        healthBarCtrl.UpdateHealthBar(hitPoints, maxHitpoints);
+        healthCtrl = GetComponent<HealthController>();
+        healthCtrl.OnDeath += OnEnemyDeathHandler;
+        healthCtrl.OnHealthUpdated += OnEnemyHealthUpdatedHandler;
     }
 
-    public void TakeDamage(int damage)
+    protected virtual void OnEnemyDeathHandler()
     {
-        hitPoints -= damage;
-        damage = Mathf.Clamp(damage, 0, maxHitpoints);
+        // Cuando el enemigo muere, invocamos el evento OnEnemyDestroyed indicando
+        // los puntos de recompensa como parámetro.
+        OnEnemyDestroyed?.Invoke(rewardPoints);
 
-        if(hitPoints <= 0)
-        {
-            OnDeath?.Invoke(rewardPoints);
-            Destroy(gameObject);
-        }
-        else
-        {
-            healthBarCtrl.UpdateHealthBar(hitPoints, maxHitpoints);
-        }
+        // TODO: animación de hundimiento (transform.Translate(Vector3.down * Time.deltaTime * 2f)
+        // sonido de explosión??
+        Destroy(gameObject);
+    }
+
+    protected virtual void OnEnemyHealthUpdatedHandler(int currentHitPoints, int maxHitPoints)
+    {
+        // Cuando el enemigo recibe daño, actualizamos la barra de vida.
+        healthBarCtrl.UpdateHealthBar(currentHitPoints, maxHitPoints);
     }
 }

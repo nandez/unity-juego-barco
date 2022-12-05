@@ -376,6 +376,7 @@ GameObject:
   - component: {fileID: 8679067168332796063}
   - component: {fileID: 406383116025827434}
   - component: {fileID: -5390707907855072175}
+  - component: {fileID: 6632250025972689435}
   - component: {fileID: 3552362677436585682}
   m_Layer: 0
   m_Name: boat_01
@@ -512,15 +513,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b62e1f595d31514394f5b9db6c8fc02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHitpoints: 50
   speed: 5
   turnSpeed: 2
+  rewardPoints: 25
   attackRange: 15
   attackCooldown: 5
   cannonBallPrefab: {fileID: 3321069606848861998, guid: 80efd20db68ac344fba538771717e428,
     type: 3}
   leftCannonSpawnPoint: {fileID: 3400694653612448849}
   rightCannonSpawnPoint: {fileID: 8910866028442948394}
+--- !u!114 &6632250025972689435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8302928210736908837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6f7217ad434a44fa49f2e8200f9923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHitpoints: 50
+  destroyOnDeath: 0
 --- !u!114 &3552362677436585682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -539,15 +554,7 @@ MonoBehaviour:
   showTrajectory: 1
   archLineCount: 50
   archCalcInterval: 0.25
-  archHeightLimit: 0
   throwAngle: 35
-  shootRange: 15
-  startLineWidth: 0.1
-  endLineWidth: 1
-  startColor: {r: 1, g: 0.06666667, b: 0, a: 1}
-  endColor: {r: 1, g: 0.06326803, b: 0, a: 1}
-  startAlpha: 1
-  endAlpha: 0.1
 --- !u!1 &8391586449845388560
 GameObject:
   m_ObjectHideFlags: 0

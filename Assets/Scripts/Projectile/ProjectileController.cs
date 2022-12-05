@@ -31,15 +31,17 @@ public class ProjectileController : MonoBehaviour
         line = GetComponent<LineRenderer>();
     }
 
-    public void Fire(GameObject objPrefab, Vector3 hitPos, Transform firePoint)
+    public void Fire(GameObject objPrefab, Vector3 hitPos, Transform firePoint, int damage)
     {
         shootPoint = firePoint.gameObject;
         if (CheckVector(hitPos))
         {
-            GameObject obj = Instantiate(objPrefab, shootPoint.transform.position, Quaternion.identity);
-            Rigidbody rig = obj.GetComponent<Rigidbody>();
-            Vector3 force = shootDirection * rig.mass;
-            rig.AddForce(force, ForceMode.Impulse);
+            var obj = Instantiate(objPrefab, shootPoint.transform.position, Quaternion.identity);
+            obj.GetComponent<CannonBall>().damage = damage;
+
+            var rb = obj.GetComponent<Rigidbody>();
+            rb.AddForce(shootDirection * rb.mass, ForceMode.Impulse);
+
             Invoke(nameof(CleanTrajectory), 2f);
         }
     }

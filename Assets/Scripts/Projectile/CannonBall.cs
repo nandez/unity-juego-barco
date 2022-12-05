@@ -16,9 +16,9 @@ public class CannonBall : MonoBehaviour
 
     void OnCollisionEnter(Collision coll)
     {
-        // Si el objeto colisionado tiene el componente IDamageable, le aplicamos daño.
-        if (coll.gameObject.TryGetComponent<IDamageable>(out var damageable))
-            damageable.TakeDamage(damage);
+        // Si el objeto colisionado tiene el componente HealthController, le aplicamos daño.
+        if (coll.gameObject.TryGetComponent<HealthController>(out var healthCtrl))
+            healthCtrl.TakeDamage(damage);
 
         // Destruimos el objeto.
         Destroy(gameObject);

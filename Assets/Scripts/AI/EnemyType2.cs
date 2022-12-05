@@ -14,8 +14,10 @@ using UnityEngine;
 /// </summary>
 public class EnemyType2 : BaseEnemy
 {
+    [Header("Attack Settings")]
     [SerializeField] protected float attackRange; // Indica la distancia a la que el enemigo ataca.
     [SerializeField] protected float chaseRange; // Indica el radio de distancia en la que el jugador es perseguido.
+    [SerializeField] protected int baseDamage = 5; // Daño base del ataque.
 
     protected bool isFleeing; // Indica si el enemigo está huyendo del combate.
 
@@ -23,7 +25,7 @@ public class EnemyType2 : BaseEnemy
     void Update()
     {
         // Determinamos si el barco se encuentra huyendo.
-        isFleeing = hitPoints <= maxHitpoints * 0.25f;
+        isFleeing = healthCtrl.GetHitpoints() <= healthCtrl.GetMaxHitpoints() * 0.25f;
 
         if (player != null)
         {
@@ -46,11 +48,16 @@ public class EnemyType2 : BaseEnemy
                 FleeFromPlayer();
             }
         }
+
+        // TODO: testing - quitar código de prueba.
+        if (Input.GetKeyDown(KeyCode.Space))
+            healthCtrl.TakeDamage(5);
     }
 
     void Attack()
     {
         // TODO: implementar el ataque...
+        transform.LookAt(player.transform.position, Vector3.up);
     }
 
     void ChasePlayer()

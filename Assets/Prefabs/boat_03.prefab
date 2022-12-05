@@ -311,6 +311,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8679067168332796063}
   - component: {fileID: -3009445449336347489}
+  - component: {fileID: 8781442943308099245}
   m_Layer: 0
   m_Name: boat_03
   m_TagString: Untagged
@@ -347,10 +348,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10ea4edde8b2ad48b02e29dc131a8b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHitpoints: 50
   speed: 5
   turnSpeed: 2
+  rewardPoints: 20
   fleeRange: 20
+--- !u!114 &8781442943308099245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8302928210736908837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6f7217ad434a44fa49f2e8200f9923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHitpoints: 60
+  destroyOnDeath: 0
 --- !u!1 &8391586449845388560
 GameObject:
   m_ObjectHideFlags: 0

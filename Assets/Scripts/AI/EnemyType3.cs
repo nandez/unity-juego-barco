@@ -25,6 +25,10 @@ public class EnemyType3 : BaseEnemy
                 FleeFromPlayer();
             }
         }
+
+        // TODO: testing - quitar código de prueba.
+        if (Input.GetKeyDown(KeyCode.Space))
+            healthCtrl.TakeDamage(5);
     }
 
     void FleeFromPlayer()
