@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.spoiledcat.git": {
-      "version": "1.0.12",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://registry.spoiledcat.com"
-    },
     "com.unity.burst": {
       "version": "1.6.6",
       "depth": 1,

@@ -6,7 +6,7 @@ using UnityEngine;
 /// Al contrario que los barcos de Tipo 2, este comportamiento funciona a la inversa; cuando el
 /// jugador entra en un rango predefinido, el barco enemigo intentará huir del jugador.
 /// </summary>
-public class EnemyType3 : EnemyBaseController
+public class EnemyType3 : BaseEnemy
 {
     [SerializeField] protected float fleeRange; // Indica la distancia a la que el enemigo ataca.
 
@@ -17,7 +17,7 @@ public class EnemyType3 : EnemyBaseController
         if (player != null)
         {
             // Calculamos la distancia entre el enemigo y el jugador.
-            var distance = Vector3.Distance(transform.position, player.position);
+            var distance = Vector3.Distance(transform.position, player.transform.position);
 
             // Si la distancia es menor a la distancia de ataque, atacamos.
             if (distance < fleeRange)
@@ -35,7 +35,7 @@ public class EnemyType3 : EnemyBaseController
     void FleeFromPlayer()
     {
         // Calculamos el vector dirección entre el enemigo y el jugador.
-        var direction = (player.position - transform.position) * -1;
+        var direction = (player.transform.position - transform.position) * -1;
 
         // Rotamos en dirección al jugador
         var rotation = Quaternion.LookRotation(direction);

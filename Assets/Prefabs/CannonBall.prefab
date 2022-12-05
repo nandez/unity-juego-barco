@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7524407242238312769}
   - component: {fileID: 3236449548439106435}
   - component: {fileID: 887054901564427450}
-  - component: {fileID: 5583980408681552159}
   - component: {fileID: 4868732635568067549}
+  - component: {fileID: 1157413995259974423}
   m_Layer: 0
   m_Name: CannonBall
   m_TagString: Untagged
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 530e69d65a31f4042b1cddfa1f1a8b2c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,20 +99,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5583980408681552159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3321069606848861998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad12aa4aa23f62b429210f7650b6952d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  impulse: 10
-  lifeTime: 3
 --- !u!54 &4868732635568067549
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -129,3 +115,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1157413995259974423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3321069606848861998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c788a4bbd4255f44a4268cfba015c11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeTime: 10

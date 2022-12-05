@@ -6,55 +6,45 @@ using UnityEngine;
 /// Este tipo de enemigo se encuentra en constante búsqueda del
 /// jugador e intentará hundirlo a toda costa.
 /// </summary>
-public class EnemyType1 : EnemyBaseController
+[RequireComponent(typeof(ProjectileController))]
+public class EnemyType1 : BaseEnemy
 {
     [Header("Attack Settings")]
-    [Tooltip("Indica la distancia a la que el enemigo ataca.")]
-    [SerializeField] protected float attackRange = 5f;
+    [SerializeField] protected float attackRange = 5f; //Indica la distancia a la que el enemigo ataca.
+    [SerializeField] protected float attackCooldown = 5f; //Indica el tiempo de espera entre disparo y disparo.
+    [SerializeField] protected string playerLeftSideTag = "PlayerLeftSide"; //Indica el tag asignado al objeto que representa el lado izquierdo del jugador.
+    [SerializeField] protected string playerRightSideTag = "PlayerRightSide"; //Indica el tag asignado al objeto que representa el lado derecho del jugador.
 
-    [Tooltip("Indica el tiempo de espera entre disparo y disparo.")]
-    [SerializeField] protected float attackCooldown = 5f;
-
-    [Tooltip("Indica el tag asignado al objeto que representa el lado izquierdo del jugador.")]
-    [SerializeField] protected string playerLeftSideTag = "PlayerLeftSide";
-
-    [Tooltip("Indica el tag asignado al objeto que representa el lado derecho del jugador.")]
-    [SerializeField] protected string playerRightSideTag = "PlayerRightSide";
-
-    [Tooltip("Representa el prefab de la bala de cañon.")]
+    [Header("Cannon Settings")]
     [SerializeField] protected GameObject cannonBallPrefab;
+    [SerializeField] protected Transform leftCannonSpawnPoint;
+    [SerializeField] protected Transform rightCannonSpawnPoint;
 
-    private Transform playerRightSide;
-    private Transform playerLeftSide;
     private float attackTimer = 0;
+    protected ProjectileController projectileCtrl;
+    private Vector3 landPoint = Vector3.zero;
 
     protected override void Initialize()
     {
         // Llamamos al método de la clase base para heredar su comportamiento.
         base.Initialize();
 
-        // Buscamos los puntos de referencia del jugador.
-        playerLeftSide = GameObject.FindGameObjectWithTag(playerLeftSideTag).transform;
-        playerRightSide = GameObject.FindGameObjectWithTag(playerRightSideTag).transform;
+        // Cargamos las referencias a los componentes propios..
+        projectileCtrl = GetComponent<ProjectileController>();
     }
 
     private void Update()
     {
         if (player != null)
         {
-            // Calculamos la distancia entre el enemigo y el jugador.
-            var distance = Vector3.Distance(transform.position, player.position);
+            // Calculamos la distancia entre el enemigo y el jugador y verificamos
+            // el rango de ataque para determinar si atacar o perseguir al jugador..
+            var distance = Vector3.Distance(transform.position, player.transform.position);
 
-            // Si la distancia es menor a la distancia de ataque, atacamos.
             if (distance < attackRange)
-            {
                 Attack();
-            }
             else
-            {
-                // Si no, nos movemos hacia el jugador.
                 ChasePlayer();
-            }
         }
 
         // Actualizamos el cooldown de ataque.
@@ -88,10 +78,12 @@ public class EnemyType1 : EnemyBaseController
             Vector3.up
         );
 
-        // Determinamos a que lado del jugador nos posicionamos en base al cuadrante en el que nos encontramos.
+        // Determinamos a que lado del jugador nos posicionamos en base al cuadrante en el que nos encontramos,
+        // utilizando el vector "right" del jugador para determinar el lado y asegurándonos de estar dentro del radio
+        // de ataque.
         var targetPosition = dirAngle >= 0 && dirAngle < 180
-            ? playerRightSide.position
-            : playerLeftSide.position;
+            ? player.transform.position + (player.transform.right * attackRange * 0.9f)
+            : player.transform.position + (-player.transform.right * attackRange * 0.9f);
 
         // Si aún no hemos llegado al punto de ataque, nos movemos hacia el mismo.
         if (Vector3.Distance(transform.position, targetPosition) > 0.25f)
@@ -99,61 +91,37 @@ public class EnemyType1 : EnemyBaseController
             // Calculamos la dirección hacia el nuevo objetivo y rotamos en su dirección
             var newDirection = targetPosition - transform.position;
             var newRotation = Quaternion.LookRotation(newDirection);
-            transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, turnSpeed * 2f * Time.deltaTime);
-            transform.position += newDirection.normalized * speed * 2f * Time.deltaTime;
+            transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, turnSpeed * Time.deltaTime);
+            transform.position += newDirection.normalized * speed * Time.deltaTime;
         }
         else
         {
+            // Rotamos paulatinamente en la misma dirección en la que gira el jugador..
+            transform.rotation = Quaternion.Lerp(transform.rotation, player.transform.rotation, turnSpeed * Time.deltaTime);
+
             // Si el cooldown nos habilita, disparamos.
             if (attackTimer <= 0)
             {
-                // Calculamos la dirección de disparo e instanciamos una bala de cañon.
-                var fireDir = (player.transform.position - transform.position).normalized;
-                var cannonBall = Instantiate(cannonBallPrefab, transform.position, Quaternion.identity);
-                var cannonBallCtrl = cannonBall.GetComponent<CannonBallController>();
-                cannonBallCtrl.SetDirection(fireDir);
+                // Determinamos que cañon utilizar en base al cuadrante en el que nos encontramos.
+                var cannonSpawnPoint = dirAngle >= 0 && dirAngle < 180
+                    ? leftCannonSpawnPoint
+                    : rightCannonSpawnPoint;
+
+                // Calculamos la dirección de disparo y llamamos al controlador de proyectiles
+                // para disparar la bala de cañon.
+                landPoint = player.transform.position + (player.transform.forward * Random.Range(0, 2f));
+                projectileCtrl.Fire(cannonBallPrefab, landPoint, cannonSpawnPoint);
 
                 // Reiniciamos el cooldown.
                 attackTimer = attackCooldown;
             }
         }
-        /*var value = player.InverseTransformPoint(transform.position);
-        Debug.Log($"Value: {value}");
-
-
-        var right = value.x > 0;
-
-        var angle = Mathf.Deg2Rad * (right ? attackPointAngle : -attackPointAngle);
-        var x = player.position.x;
-        if (value.x > 0)
-            x += (attackRange * Mathf.Cos(angle));
-        else
-            x -= (attackRange * Mathf.Cos(angle));
-
-
-        var z = player.position.z + (attackRange * Mathf.Sin(angle));
-        if (value.z > 0)
-            z += (attackRange * Mathf.Sin(angle));
-        else
-            z -= (attackRange * Mathf.Sin(angle));
-
-
-        var target = new Vector3(x, player.position.y, z);
-        //Debug.Log($"Target: {target}");
-        transform.position = target;*/
-
-
-        // TODO: implementar el ataque...
-        // Calculamos el punto al que debemos llegar para atacar.
-        // aumentamos la velocidad de movimiento para acercarnos más rápido.
-        // movemos el bote hacia el punto.
-        // atacamos con cooldown
     }
 
     private void ChasePlayer()
     {
         // Calculamos el vector dirección entre el enemigo y el jugador.
-        var direction = player.position - transform.position;
+        var direction = player.transform.position - transform.position;
 
         // Rotamos en dirección al jugador
         var rotation = Quaternion.LookRotation(direction);
@@ -172,5 +140,8 @@ public class EnemyType1 : EnemyBaseController
         // Dibujamos el rango de ataque..
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+
+        if (landPoint != Vector3.zero)
+            Gizmos.DrawCube(landPoint, Vector3.one * 0.25f);
     }
 }

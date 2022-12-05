@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBaseController : MonoBehaviour
+public class BaseEnemy : MonoBehaviour
 {
     [Tooltip("Indica los puntos de vida iniciales del enemigo.")]
-    [SerializeField] protected int maxHitPoints;
+    [SerializeField] protected int hitPoints;
 
     [Tooltip("Indica la velocidad de movimiento del enemigo..")]
     [SerializeField] protected float speed;
@@ -13,12 +13,9 @@ public class EnemyBaseController : MonoBehaviour
     [Tooltip("Indica la velocidad de rotación del enemigo.")]
     [SerializeField] protected float turnSpeed;
 
-    [Tooltip("Indica el tag que se le asigna al jugador.")]
-    [SerializeField] protected string playerTag;
 
-
-    protected Transform player; // Referencia al jugador.
-    protected int hitPoints; // Indica la vida actual del enemigo.
+    protected GameObject player; // Referencia al jugador.
+    protected int currentHitPoints; // Indica la vida actual del enemigo.
 
     void Start()
     {
@@ -32,13 +29,13 @@ public class EnemyBaseController : MonoBehaviour
     protected virtual void Initialize()
     {
         // Buscamos al jugador por su tag.
-        player = GameObject.FindGameObjectWithTag(playerTag).transform;
+        player = GameObject.FindObjectOfType<PlayerMovementController>()?.gameObject;
 
         // Si no lo encontramos, tiramos un error..
         if (player == null)
-            throw new System.Exception($"Falta asignar el tag {playerTag} al jugador!");
+            throw new System.Exception($"No se encontró al jugador en la escena.");
 
         // Inicializamos los puntos de vida.
-        hitPoints = maxHitPoints;
+        currentHitPoints = hitPoints;
     }
 }

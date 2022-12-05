@@ -249,7 +249,7 @@ MonoBehaviour:
   speed: 5
   turnSpeed: 2
   playerTag: Player
-  attackRange: 10
+  attackRange: 15
   chaseRange: 30
 --- !u!1 &8391586449845388560
 GameObject:

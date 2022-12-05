@@ -12,7 +12,7 @@ using UnityEngine;
 ///
 /// Si su HP se reduce al 25%, este tipo de barco emprenderá la huida del combate
 /// </summary>
-public class EnemyType2 : EnemyBaseController
+public class EnemyType2 : BaseEnemy
 {
     [SerializeField] protected float attackRange; // Indica la distancia a la que el enemigo ataca.
     [SerializeField] protected float chaseRange; // Indica el radio de distancia en la que el jugador es perseguido.
@@ -23,12 +23,12 @@ public class EnemyType2 : EnemyBaseController
     void Update()
     {
         // Determinamos si el barco se encuentra huyendo.
-        isFleeing = hitPoints <= maxHitPoints * 0.25f;
+        isFleeing = currentHitPoints <= hitPoints * 0.25f;
 
         if (player != null)
         {
             // Calculamos la distancia entre el enemigo y el jugador.
-            var distance = Vector3.Distance(transform.position, player.position);
+            var distance = Vector3.Distance(transform.position, player.transform.position);
 
             // Si la distancia es menor a la distancia de ataque y no estamos huyendo atacamos.
             if (!isFleeing && distance < attackRange)
@@ -56,7 +56,7 @@ public class EnemyType2 : EnemyBaseController
     void ChasePlayer()
     {
         // Calculamos el vector dirección entre el enemigo y el jugador.
-        var direction = player.position - transform.position;
+        var direction = player.transform.position - transform.position;
 
         // Rotamos en dirección al jugador
         var rotation = Quaternion.LookRotation(direction);
@@ -73,7 +73,7 @@ public class EnemyType2 : EnemyBaseController
     void FleeFromPlayer()
     {
         // Calculamos el vector dirección entre el enemigo y el jugador.
-        var direction = (player.position - transform.position) * -1;
+        var direction = (player.transform.position - transform.position) * -1;
 
         // Rotamos en dirección al jugador
         var rotation = Quaternion.LookRotation(direction);
