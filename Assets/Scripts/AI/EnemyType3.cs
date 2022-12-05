@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Este tipo de enemigo se encuentra en constante búsqueda del
-/// jugador e intentará hundirlo a toda costa.
+/// Al contrario que los barcos de Tipo 2, este comportamiento funciona a la inversa; cuando el
+/// jugador entra en un rango predefinido, el barco enemigo intentará huir del jugador.
 /// </summary>
-public class EnemyType1 : EnemyBaseController
+public class EnemyType3 : BaseEnemy
 {
-    [SerializeField] protected float attackRange; // Indica la distancia a la que el enemigo ataca.
+    [SerializeField] protected float fleeRange; // Indica la distancia a la que el enemigo ataca.
 
 
     // Update is called once per frame
@@ -17,30 +17,24 @@ public class EnemyType1 : EnemyBaseController
         if (player != null)
         {
             // Calculamos la distancia entre el enemigo y el jugador.
-            var distance = Vector3.Distance(transform.position, player.position);
+            var distance = Vector3.Distance(transform.position, player.transform.position);
 
             // Si la distancia es menor a la distancia de ataque, atacamos.
-            if (distance < attackRange)
+            if (distance < fleeRange)
             {
-                Attack();
-            }
-            else
-            {
-                // Si no, nos movemos hacia el jugador.
-                ChasePlayer();
+                FleeFromPlayer();
             }
         }
+
+        // TODO: testing - quitar código de prueba.
+        if (Input.GetKeyDown(KeyCode.Space))
+            healthCtrl.TakeDamage(5);
     }
 
-    void Attack()
-    {
-        // TODO: implementar el ataque...
-    }
-
-    void ChasePlayer()
+    void FleeFromPlayer()
     {
         // Calculamos el vector dirección entre el enemigo y el jugador.
-        var direction = player.position - transform.position;
+        var direction = (player.transform.position - transform.position) * -1;
 
         // Rotamos en dirección al jugador
         var rotation = Quaternion.LookRotation(direction);
@@ -56,8 +50,7 @@ public class EnemyType1 : EnemyBaseController
 
     void OnDrawGizmos()
     {
-        // Dibujamos el rango de ataque..
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, fleeRange);
     }
 }
