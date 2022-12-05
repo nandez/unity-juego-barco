@@ -19,8 +19,11 @@ public class EnemyType1 : BaseEnemy
     [SerializeField] protected Transform leftCannonSpawnPoint;
     [SerializeField] protected Transform rightCannonSpawnPoint;
 
-    private float attackTimer = 0;
+    // Component References
     protected ProjectileController projectileCtrl;
+
+    // Private fields
+    private float attackTimer = 0;
     private Vector3 landPoint = Vector3.zero;
 
     protected override void Initialize()

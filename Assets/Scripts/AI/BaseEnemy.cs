@@ -53,7 +53,7 @@ public class BaseEnemy : MonoBehaviour
         // los puntos de recompensa como parámetro.
         OnEnemyDestroyed?.Invoke(rewardPoints);
 
-        // TODO: animación de hundimiento (transform.Translate(Vector3.down * Time.deltaTime * 2f)
+        // TODO: animación de "hundimiento" (transform.Translate(Vector3.down * Time.deltaTime * 2f)
         // sonido de explosión??
         Destroy(gameObject);
     }

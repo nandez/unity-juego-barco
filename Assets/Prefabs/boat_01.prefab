@@ -443,9 +443,7 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -773,7 +771,7 @@ PrefabInstance:
     - target: {fileID: 6974729658151049433, guid: 49d08c2ed95e6db469dbcb50ffd7e089,
         type: 3}
       propertyPath: m_FillAmount
-      value: 0.604
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8641416747866168472, guid: 49d08c2ed95e6db469dbcb50ffd7e089,
         type: 3}
