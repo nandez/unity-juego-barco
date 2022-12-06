@@ -22,7 +22,7 @@ MonoBehaviour:
   depthColor: {r: 0.49864718, g: 0.8026077, b: 0.8207547, a: 1}
   maxDepth: 10
   enableFoam: 1
-  foamColor: {r: 1, g: 1, b: 1, a: 0.5882353}
+  foamColor: {r: 1, g: 1, b: 1, a: 0.35686275}
   foamDistance: 10
   enableFoamHQ: 1
   foamNoiseScaleHQ: 1
