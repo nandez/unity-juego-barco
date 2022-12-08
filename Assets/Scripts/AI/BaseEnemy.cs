@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(HealthController))]
 public class BaseEnemy : MonoBehaviour
 {
     [Header("Enemy Settings")]
@@ -20,10 +21,14 @@ public class BaseEnemy : MonoBehaviour
     [Header("Events")]
     public UnityAction<int> OnEnemyDestroyed; // Evento que se invoca cuando el enemigo es destruido.
 
-    protected HealthController healthCtrl; // Referencia al controlador de vida.
-    protected HealthBarController healthBarCtrl; // Referencia al controlador de la barra de vida.
-    protected GameObject player; // Referencia al jugador.
+    [Header("References")]
+    [SerializeField] protected BarController healthBarCtrl; // Referencia al controlador de la barra de vida.
 
+    // Component References
+    protected HealthController healthCtrl; // Referencia al controlador de vida.
+
+    // Protected Fields
+    protected GameObject player; // Referencia al jugador.
 
     void Start()
     {
@@ -41,7 +46,6 @@ public class BaseEnemy : MonoBehaviour
 
         // Inicializamos las referencias a los componentes que controla los puntos de vida
         // y asignamos los handlers para los eventos.
-        healthBarCtrl = GetComponentInChildren<HealthBarController>();
         healthCtrl = GetComponent<HealthController>();
         healthCtrl.OnDeath += OnEnemyDeathHandler;
         healthCtrl.OnHealthUpdated += OnEnemyHealthUpdatedHandler;
@@ -61,6 +65,6 @@ public class BaseEnemy : MonoBehaviour
     protected virtual void OnEnemyHealthUpdatedHandler(int currentHitPoints, int maxHitPoints)
     {
         // Cuando el enemigo recibe daño, actualizamos la barra de vida.
-        healthBarCtrl.UpdateHealthBar(currentHitPoints, maxHitPoints);
+        healthBarCtrl?.UpdateValue(currentHitPoints, maxHitPoints);
     }
 }

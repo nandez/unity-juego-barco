@@ -48,10 +48,24 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]bool RRay,LRay;
     RaycastHit Hit,RHit,LHit;
 
+    [Space]
+    [Space]
+    [Header("Ataque")]
+    [Space]
+
+    [SerializeField] protected float attackRange = 10f; // Indica el rango de disparo
+    [SerializeField] protected bool drawAttackRangeGizmo = false; // Indica si dibujar el gizmo de rango de ataque.
+    [SerializeField] protected CannonController cannonCtrl; // Controlador de cañon
+    [SerializeField] protected List<CannonBall> cannonBallPrefabs; // Prefabs de balas de cañon
+    private CannonBall currentCannonBall; // Bala de cañon actual para disparar
 
     void Start()
     {
         limiteVelocidadInicial = limiteVelocidad;
+
+        // Inicializamos el prefab del proyectil que se usará para disparar..
+        if (cannonBallPrefabs?.Count > 0)
+            currentCannonBall = cannonBallPrefabs[0];
     }
 
     void Update()
@@ -88,6 +102,14 @@ public class PlayerMovementController : MonoBehaviour
             {
                 PuntoHit = Hit.point;                                            //guardo el punto que choco en una variable llamada PuntoHit
                 Move = true;                                                     // el jugador podra moverse
+            }
+            else if(Input.GetKey(KeyCode.Mouse1))
+            {
+                // Cuando el jugador hace click derecho, verificamos si el controlador de cañon
+                // puede disparar, y si la distancia al punto seleccionado está dentro del rango de ataque.
+                // Si es asi, le pasamos el punto donde hizo click y la el prefab de la bala de cañon actual..
+                if(cannonCtrl.CanFire() && Vector3.Distance(transform.position, Hit.point) <= attackRange)
+                    cannonCtrl.SetTarget(currentCannonBall, Hit.point, gameObject);
             }
         }
         PuntoHit.y = transform.position.y;
@@ -183,5 +205,15 @@ public class PlayerMovementController : MonoBehaviour
     public void CameraControl()
     {
         mainCamera.transform.position = transform.position + new Vector3(0, distanciacam, distanciacam * -1);
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Dibujamos el rango de ataque..
+        if(drawAttackRangeGizmo)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
+        }
     }
 }
