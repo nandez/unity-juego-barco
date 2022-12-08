@@ -18,6 +18,10 @@ public class EnemyType1 : BaseEnemy
     [SerializeField] protected List<CannonBall> cannonBallPrefabs; // TODO: representa el tipo de proyectil que dispara el cañón.. podría variar si tiene un powerup.
 
 
+    [Header("Gizmos Settings")]
+    [SerializeField] protected bool drawAttackRangeGizmo = false; // Indica si se debe dibujar el gizmo de rango de ataque.
+    [SerializeField] protected bool drawTargetGizmo = false; // Indica si se debe dibujar el gizmo de rango de ataque.
+
     // Private fields
     private Vector3 target; // Indica la posición de disparo del proyectil..
     private CannonBall currentCannonBall; // Indica el prefab del proyectil que se está usando para disparar..
@@ -70,7 +74,7 @@ public class EnemyType1 : BaseEnemy
 
         // Determinamos el punto donde queremos que el proyectil impacte.
         var spreadArea = Random.insideUnitCircle;
-        target = player.transform.position + (player.transform.forward * Random.Range(0, 3f)) + new Vector3(spreadArea.x, player.transform.position.y, spreadArea.y);
+        target = player.transform.position + (player.transform.forward * Random.Range(0, 3f)) + new Vector3(spreadArea.x, player.transform.position.y, spreadArea.y) * Random.Range(1, 2f);
 
         // Llamamos al método Fire del cañon para disparar el proyectil cuando esté listo.
         cannonCtrl.SetTarget(currentCannonBall, target, gameObject);
@@ -96,10 +100,13 @@ public class EnemyType1 : BaseEnemy
     private void OnDrawGizmos()
     {
         // Dibujamos el rango de ataque..
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        if (drawAttackRangeGizmo)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
+        }
 
-        if (target != Vector3.zero)
+        if (target != Vector3.zero && drawTargetGizmo)
             Gizmos.DrawCube(target, Vector3.one * 0.25f);
     }
 }

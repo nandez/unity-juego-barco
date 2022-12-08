@@ -25,6 +25,11 @@ public class EnemyType2 : BaseEnemy
     [SerializeField] protected List<CannonBall> cannonBallPrefabs; // TODO: representa el tipo de proyectil que dispara el cañón.. podría variar si tiene un powerup.
 
 
+    [Header("Gizmos Settings")]
+    [SerializeField] protected bool drawAttackRangeGizmo = false; // Indica si se debe dibujar el gizmo de rango de ataque.
+    [SerializeField] protected bool drawChaseRangeGizmo = false; // Indica si se debe dibujar el gizmo de rango de ataque.
+    [SerializeField] protected bool drawTargetGizmo = false; // Indica si se debe dibujar el gizmo de rango de ataque.
+
     // Private fields
     private Vector3 target; // Indica la posición de disparo del proyectil..
     private CannonBall currentCannonBall; // Indica el prefab del proyectil que se está usando para disparar..
@@ -137,11 +142,20 @@ public class EnemyType2 : BaseEnemy
     void OnDrawGizmos()
     {
         // Dibujamos el rango de ataque..
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        if (drawAttackRangeGizmo)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
+        }
 
         // Dibujamos el rango de persecución.
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, chaseRange);
+        if (drawChaseRangeGizmo)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, chaseRange);
+        }
+
+        if (drawTargetGizmo && target != Vector3.zero)
+            Gizmos.DrawCube(target, Vector3.one * 0.25f);
     }
 }

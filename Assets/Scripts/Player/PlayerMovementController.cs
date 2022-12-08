@@ -54,6 +54,7 @@ public class PlayerMovementController : MonoBehaviour
     [Space]
 
     [SerializeField] protected float attackRange = 10f; // Indica el rango de disparo
+    [SerializeField] protected bool drawAttackRangeGizmo = false; // Indica si dibujar el gizmo de rango de ataque.
     [SerializeField] protected CannonController cannonCtrl; // Controlador de cañon
     [SerializeField] protected List<CannonBall> cannonBallPrefabs; // Prefabs de balas de cañon
     private CannonBall currentCannonBall; // Bala de cañon actual para disparar
@@ -209,7 +210,10 @@ public class PlayerMovementController : MonoBehaviour
     private void OnDrawGizmos()
     {
         // Dibujamos el rango de ataque..
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        if(drawAttackRangeGizmo)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
+        }
     }
 }
