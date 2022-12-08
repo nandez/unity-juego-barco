@@ -55,7 +55,7 @@ public class CannonController : MonoBehaviour
             cooldownBarCtrl.UpdateValue(attackTimer, attackCooldown);
     }
 
-    public void SetTarget(CannonBall projectilePrefab, Vector3 target)
+    public void SetTarget(CannonBall projectilePrefab, Vector3 target, GameObject owner)
     {
         // Rotamos el pivote del cañon hacia el objetivo.
         var rotation = Quaternion.LookRotation(target - cannonPivot.position, Vector3.up);
@@ -67,6 +67,11 @@ public class CannonController : MonoBehaviour
 
             // Instanciamos el proyectil y le aplicamos una fuerza de impulso
             var projectile = Instantiate(projectilePrefab, cannonFirePoint.position, Quaternion.identity);
+
+            // Deshabilitamos la colisión entre el proyectil y su propietario.
+            Physics.IgnoreCollision(projectile.GetComponent<Collider>(), owner.GetComponent<Collider>(), true);
+
+            // Le aplicamos una fuerza de impulso al proyectil.
             var projectileRb = projectile.GetComponent<Rigidbody>();
             projectileRb.AddForce(fireDirection * projectileRb.mass, ForceMode.Impulse);
 

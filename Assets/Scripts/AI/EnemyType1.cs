@@ -73,7 +73,7 @@ public class EnemyType1 : BaseEnemy
         target = player.transform.position + (player.transform.forward * Random.Range(0, 3f)) + new Vector3(spreadArea.x, player.transform.position.y, spreadArea.y);
 
         // Llamamos al método Fire del cañon para disparar el proyectil cuando esté listo.
-        cannonCtrl.SetTarget(currentCannonBall, target);
+        cannonCtrl.SetTarget(currentCannonBall, target, gameObject);
     }
 
     private void ChasePlayer()

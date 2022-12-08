@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 354997427149599725}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -228,6 +228,7 @@ GameObject:
   - component: {fileID: 8679067168332796063}
   - component: {fileID: -3009445449336347489}
   - component: {fileID: 8781442943308099245}
+  - component: {fileID: 1829584576184091328}
   m_Layer: 0
   m_Name: boat_03
   m_TagString: Untagged
@@ -283,6 +284,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHitpoints: 60
   destroyOnDeath: 0
+--- !u!65 &1829584576184091328
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8302928210736908837}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.1081161, y: 1.8495584, z: 3.3057415}
+  m_Center: {x: 0.0000038146973, y: 0.033243537, z: 0.25898778}
 --- !u!1 &8391586449845388560
 GameObject:
   m_ObjectHideFlags: 0
