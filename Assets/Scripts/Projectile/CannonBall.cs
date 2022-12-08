@@ -5,8 +5,7 @@ using UnityEngine;
 public class CannonBall : MonoBehaviour
 {
     [SerializeField] protected float lifeTime;
-
-    public int damage;
+    [SerializeField] protected int damage;
 
     void Start()
     {
@@ -18,7 +17,11 @@ public class CannonBall : MonoBehaviour
     {
         // Si el objeto colisionado tiene el componente HealthController, le aplicamos daño.
         if (coll.gameObject.TryGetComponent<HealthController>(out var healthCtrl))
+        {
+            Debug.Log("CannonBall: OnCollisionEnter: " + coll.gameObject.name + " has HealthController component.");
             healthCtrl.TakeDamage(damage);
+        }
+
 
         // Destruimos el objeto.
         Destroy(gameObject);

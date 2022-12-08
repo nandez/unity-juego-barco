@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(HealthController))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] protected BarController healthBarCtrl;
+
+    // Component References
     protected HealthController healthCtrl;
-    protected HealthBarController healthBarCtrl;
 
+    public UnityAction OnPlayerDeath; // Evento que se invoca cuando el jugador muere.
 
-    [Tooltip("Evento que se dispara cuando muere el jugador..")]
-    public UnityAction OnPlayerDeath;
     void Start()
     {
         // Buscamos los componentes HealthController y HealthBarController y asignamos los handlers para los eventos.
-        healthBarCtrl = GetComponentInChildren<HealthBarController>();
         healthCtrl = GetComponent<HealthController>();
         healthCtrl.OnHealthUpdated += OnHealthUpdatedHandler;
         healthCtrl.OnDeath += OnDeathHandler;
     }
-
 
     private void OnDeathHandler()
     {
@@ -35,6 +35,6 @@ public class PlayerController : MonoBehaviour
     private void OnHealthUpdatedHandler(int currentHitPoints, int maxHitPoints)
     {
         // Actualizamos la barra de vida.
-        healthBarCtrl.UpdateHealthBar(currentHitPoints, maxHitPoints);
+        healthBarCtrl?.UpdateValue(currentHitPoints, maxHitPoints);
     }
 }
