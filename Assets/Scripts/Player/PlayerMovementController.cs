@@ -85,7 +85,6 @@ public class PlayerMovementController : MonoBehaviour
         }
 
         velocidad = (sentido.magnitude * 2);
-        Debug.Log(velocidad);
         if (velocidad > limiteVelocidad)
         {
             velocidad = limiteVelocidad;
