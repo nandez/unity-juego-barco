@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerRightSide
   - PlayerLeftSide
+  - Island
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - WaterMask
+  - Island
   - 
   - 
   - 

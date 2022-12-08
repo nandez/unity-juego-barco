@@ -4,27 +4,85 @@ using UnityEngine;
 
 public class PlayerMovementController : MonoBehaviour
 {
-    [Header("Camara y Rayo de la camara")]
-    [SerializeField] Camera mainCamera; //  Camara Principal
-    [SerializeField] Ray ray;           //  rayo camara
-    [SerializeField] Vector3 PuntoHit, sentido;  //  punto donde se hizo click
-    [SerializeField] bool Move = false;
-    [SerializeField] bool CanMove;
-    [SerializeField] LayerMask Mask;
-    [SerializeField] float velocidad, sqrdistanceToMove, sqrMinDistace, speedturn, distanciacam;
 
-    RaycastHit Hit;
-    // Start is called before the first frame update
+    [Header("Otros")]
+
+    [Space]
+
+    [SerializeField] GameObject PosRayoR;
+    [SerializeField] GameObject PosRayoL, SentidoRayoOBJ;
+
+    // Privados [[[]]]
+    private Vector3 mirandoA,PosR,PosL;
+
+    [Space]
+    [Space]
+
+    [Header("Camara")]
+
+    [Space]
+
+    [SerializeField] Camera mainCamera; //  Camara Principal
+    [SerializeField] float distanciacam;
+    [SerializeField] LayerMask WaterMask;
+
+    // Privados [[[]]]
+    private Ray ray;                    //  rayo camara
+    private Vector3 PuntoHit;  //  punto donde se hizo click
+    private bool Move = false;
+
+    [Space]
+    [Space]
+
+    [Header("Movimiento")]
+
+    [Space]
+
+    [SerializeField] float limiteVelocidad;
+    [SerializeField] float speedturn, sqrMinDistace;
+    [SerializeField] LayerMask IslandMask;
+
+    // Privados[[[]]]
+    private float velocidad, sqrdistanceToMove,limiteVelocidadInicial,realSpeedTurn;
+    private Vector3 destino, sentido;
+    [SerializeField]bool RRay,LRay;
+    RaycastHit Hit,RHit,LHit;
+
+
     void Start()
     {
+        limiteVelocidadInicial = limiteVelocidad;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        Desaceleracion();
+        Mouse3D();
+        Sentido();
+        Movimiento();
+        Rotacion();
+        CameraControl();
+    }
+    public void Desaceleracion()
+    {
+        if (velocidad < limiteVelocidadInicial)
+        {
+            limiteVelocidad = velocidad + 0.03f * Time.timeScale;
+        }
 
+        velocidad = (sentido.magnitude * 2);
+        Debug.Log(velocidad);
+        if (velocidad > limiteVelocidad)
+        {
+            velocidad = limiteVelocidad;
+        }
+
+    }
+
+    public void Mouse3D()
+    {
         ray = mainCamera.ScreenPointToRay(Input.mousePosition);               // defino ray como el rayo que sale de la camara
-        if (Physics.Raycast(ray, out Hit, 400, Mask))   // si apretan click mientras que rayo esta tocando
+        if (Physics.Raycast(ray, out Hit, 400, WaterMask))   // si apretan click mientras que rayo esta tocando
         {
             if (Input.GetKey(KeyCode.Mouse0))
             {
@@ -32,11 +90,20 @@ public class PlayerMovementController : MonoBehaviour
                 Move = true;                                                     // el jugador podra moverse
             }
         }
+        PuntoHit.y = transform.position.y;
+    }
 
-        PuntoHit.y = transform.position.y;                                     //  anula y actualiza cualquier seleccion en el eje "y"
+    public void Sentido()
+    {
         sqrdistanceToMove = (PuntoHit - transform.position).sqrMagnitude;      //  distancia entre punto selecionado y jugador al cuadrado para mejorar rendimiento y evitar calculo de distancias con raices
         sentido = PuntoHit - transform.position;                               //  defino el sentido restando la posicion del jugador al punto seleccionado en la pantalla
+        Debug.DrawRay(transform.position, sentido);
 
+        mirandoA = SentidoRayoOBJ.transform.position - transform.position ;
+    }
+
+    public void Movimiento()
+    {
         if (sqrdistanceToMove > sqrMinDistace && Move)                         //  solo se mueve si la distancia es mayor que la minima para que se mueva Y no hay nada que inpida su movimiento
         {
             gameObject.transform.position = transform.position + (transform.forward * velocidad * Time.deltaTime);
@@ -44,15 +111,77 @@ public class PlayerMovementController : MonoBehaviour
         else // si la distancia es muy chica no se movera mas
         {
             Move = false;
+            limiteVelocidad = 0;
         }
+    }
+
+    public void Rotacion()
+    {
+        Debug.DrawRay(transform.position, destino, Color.red, 0);
+        Debug.DrawRay(PosRayoR.transform.position - mirandoA.normalized, (mirandoA.normalized + (PosRayoR.transform.position - transform.position)/2) * 7);
+        if (Physics.Raycast(PosRayoR.transform.position - mirandoA.normalized, mirandoA.normalized + (PosRayoR.transform.position - transform.position)/2, out RHit, 7, IslandMask))
+        {
+            PosR = RHit.point;
+            RRay = true;
+        }
+        else
+        {
+            RRay = false;
+        }
+        Debug.DrawRay(PosRayoL.transform.position - mirandoA.normalized, (mirandoA.normalized + (PosRayoL.transform.position - transform.position)/2) * 7);
+        if (Physics.Raycast(PosRayoL.transform.position - mirandoA.normalized, mirandoA.normalized + (PosRayoL.transform.position - transform.position)/2, out LHit, 7, IslandMask))
+        {
+            PosL = LHit.point;
+            LRay = true;
+        }
+        else
+        {
+            LRay = false;
+        }
+
+
+        if(RRay && LRay)
+        {
+            if ((PosR - transform.position).magnitude < (PosL - transform.position).magnitude)
+            {
+                realSpeedTurn = speedturn / 2;
+                destino = PosR.normalized + (PosRayoL.transform.position - transform.position).normalized * 3;
+            }
+            if ((PosR - transform.position).magnitude > (PosL - transform.position).magnitude)
+            {
+                destino = PosL.normalized + (PosRayoR.transform.position - transform.position).normalized * 3;
+                realSpeedTurn = speedturn / 2;
+            }
+        }
+        else
+        {
+            if (RRay && !LRay)
+            {
+                destino = PosR.normalized + (PosRayoL.transform.position - transform.position).normalized * 3;
+                realSpeedTurn = speedturn / 2;
+            }
+            if (!RRay && LRay)
+            {
+                destino = PosL.normalized + (PosRayoR.transform.position - transform.position).normalized * 3;
+                realSpeedTurn = speedturn / 2;
+            }
+        }
+
 
         if (Move)
         {
-
-            Quaternion rotation = Quaternion.LookRotation(sentido); // crea una variable rotation y le asigna la rotacion de Sentido
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, speedturn * Time.deltaTime); // transforma la rotacion del jugador suavemente
+            if(!RRay && !LRay)
+            {
+                realSpeedTurn = speedturn;
+                destino = sentido;
+            }
+            Quaternion rotation = Quaternion.LookRotation(destino); // crea una variable rotation y le asigna la rotacion de Sentido
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, realSpeedTurn * Time.deltaTime); // transforma la rotacion del jugador suavemente
         }
+    }
 
+    public void CameraControl()
+    {
         mainCamera.transform.position = transform.position + new Vector3(0, distanciacam, distanciacam * -1);
     }
 }
