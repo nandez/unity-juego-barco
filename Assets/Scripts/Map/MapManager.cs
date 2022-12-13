@@ -32,6 +32,11 @@ public class MapManager : MonoBehaviour
     [SerializeField] protected int maxEnemiesOnLevel = 10;
     [SerializeField] protected float enemySeaLevel = 0.5f; // Indica el nivel del mar donde instanciar los barcos.
 
+    public (Vector2, Vector2) GetMapBounds()
+    {
+        return (mapBottomLeft, mapTopRight);
+    }
+
     void Start()
     {
         // Instanciamos los enemigos..
