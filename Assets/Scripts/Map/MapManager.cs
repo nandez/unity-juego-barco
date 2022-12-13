@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MapManager : MonoBehaviour
 {
@@ -31,6 +32,9 @@ public class MapManager : MonoBehaviour
     [SerializeField] protected float enemySpanDelay = 5f;
     [SerializeField] protected int maxEnemiesOnLevel = 10;
     [SerializeField] protected float enemySeaLevel = 0.5f; // Indica el nivel del mar donde instanciar los barcos.
+
+    [Header("Events")]
+    public UnityAction<BaseEnemy> OnEnemySpawned;
 
     public (Vector2, Vector2) GetMapBounds()
     {
@@ -79,6 +83,8 @@ public class MapManager : MonoBehaviour
                         continue;
 
                     var enemy = Instantiate(enemyPrefab, new Vector3(pos.x, enemySeaLevel, pos.y), Quaternion.identity);
+                    OnEnemySpawned?.Invoke(enemy.GetComponent<BaseEnemy>());
+
                     done = true;
 
                 } while (!done);

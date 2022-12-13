@@ -6,25 +6,25 @@ public class GameManager : MonoBehaviour
 {
     private BaseEnemy[] enemies;
     private PlayerController player;
+    private MapManager mapManager;
 
     private int score = 0;
+    public int GetScore() => score;
 
-    void Start()
+    void Awake()
     {
-        // TODO: Este código es de prueba y debería ser reemplazado por un sistema de eventos.
-        // Mergear con la implementación de Thyago / Emiliano
-        enemies = FindObjectsOfType<BaseEnemy>();
-
-        if (enemies?.Length > 0)
-        {
-            foreach (var enemy in enemies)
-                enemy.OnEnemyDestroyed += OnEnemyDestroyedHandler;
-        }
+        mapManager = FindObjectOfType<MapManager>();
+        mapManager.OnEnemySpawned += OnEnemySpawned;
 
         player = FindObjectOfType<PlayerController>();
         player.OnPlayerDeath += OnPlayerDeathHandler;
     }
 
+
+    private void OnEnemySpawned(BaseEnemy enemy)
+    {
+        enemy.OnEnemyDestroyed += OnEnemyDestroyedHandler;
+    }
 
     private void OnEnemyDestroyedHandler(int rewardPoints)
     {
