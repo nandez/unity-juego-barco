@@ -99,7 +99,7 @@ public class MapManager : MonoBehaviour
                     continue;
 
                 var islePrefab = islandPrefabs[Random.Range(0, islandPrefabs.Count)];
-                Instantiate(islePrefab, new Vector3(pos.x, islandSeaLevel, pos.y), Quaternion.identity);
+                Instantiate(islePrefab, new Vector3(pos.x, islandSeaLevel, pos.y), Quaternion.Euler(0, Random.Range(0, 360), 0), mapContainer);
 
                 done = true;
 
