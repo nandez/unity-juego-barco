@@ -12,8 +12,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] protected LayerMask obstaclesLayerMask;
 
     [Header("Island Settings")]
-    [SerializeField] protected GameObject islandPrefab;
-    [SerializeField] protected float islandSeaLevel = 0;
+    [SerializeField] protected List<GameObject> islandPrefabs;
+    [SerializeField] protected float islandSeaLevel = 0.5f;
     [SerializeField] protected int maxIslesOnLevel = 15;
 
 
@@ -98,7 +98,9 @@ public class MapManager : MonoBehaviour
                 if (Physics.OverlapSphere(pos, minDistanceBetweenElements, obstaclesLayerMask).Length > 0)
                     continue;
 
-                var isle = Instantiate(islandPrefab, new Vector3(pos.x, islandSeaLevel, pos.y), Quaternion.identity);
+                var islePrefab = islandPrefabs[Random.Range(0, islandPrefabs.Count)];
+                Instantiate(islePrefab, new Vector3(pos.x, islandSeaLevel, pos.y), Quaternion.identity);
+
                 done = true;
 
             } while (!done);
