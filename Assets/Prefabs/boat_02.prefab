@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: -8187032307879449599}
   - component: {fileID: 1175776469273653515}
   - component: {fileID: 7469309457216471730}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: boat_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,6 +277,9 @@ MonoBehaviour:
   cannonBallPrefabs:
   - {fileID: 1157413995259974423, guid: 80efd20db68ac344fba538771717e428, type: 3}
   - {fileID: 1157413995259974423, guid: c2f1ee7d47fd8a24d8e4b545eb71d0cf, type: 3}
+  drawAttackRangeGizmo: 0
+  drawChaseRangeGizmo: 0
+  drawTargetGizmo: 0
 --- !u!114 &1175776469273653515
 MonoBehaviour:
   m_ObjectHideFlags: 0
