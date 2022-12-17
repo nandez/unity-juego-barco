@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b6f7217ad434a44fa49f2e8200f9923, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHitpoints: 50
+  maxHitpoints: 20
   destroyOnDeath: 0
 --- !u!65 &7469309457216471730
 BoxCollider:
@@ -507,6 +507,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealthBar
       objectReference: {fileID: 0}
+    - target: {fileID: 6218483376387052751, guid: 49d08c2ed95e6db469dbcb50ffd7e089,
+        type: 3}
+      propertyPath: followCamera
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6974729658151049433, guid: 49d08c2ed95e6db469dbcb50ffd7e089,
         type: 3}
       propertyPath: m_FillAmount
@@ -544,6 +549,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3066246211933173148}
     m_Modifications:
+    - target: {fileID: 3076235257402613506, guid: 8dcc249223aa1134eb5ef6b9c0e1c7fc,
+        type: 3}
+      propertyPath: followCamera
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7135901938884565638, guid: 8dcc249223aa1134eb5ef6b9c0e1c7fc,
         type: 3}
       propertyPath: m_RootOrder

@@ -7,6 +7,7 @@ public class BarController : MonoBehaviour
 {
     [SerializeField] protected Image foregroundImg;
     [SerializeField] protected bool invertFilling = false; // Indica si el relleno de la barra debe invertirse.
+    [SerializeField] protected bool followCamera = false; // Indica si la barra debe seguir la cámara.
 
     public void UpdateValue(float amount, float maxAmount)
     {
@@ -23,7 +24,10 @@ public class BarController : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.LookAt(Camera.main.transform);
-        transform.Rotate(0, 180, 0);
+        if (followCamera)
+        {
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180, 0);
+        }
     }
 }

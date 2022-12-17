@@ -282,7 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b6f7217ad434a44fa49f2e8200f9923, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHitpoints: 60
+  maxHitpoints: 10
   destroyOnDeath: 0
 --- !u!65 &1829584576184091328
 BoxCollider:
@@ -496,6 +496,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HealthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 6218483376387052751, guid: 49d08c2ed95e6db469dbcb50ffd7e089,
+        type: 3}
+      propertyPath: followCamera
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8641416747866168472, guid: 49d08c2ed95e6db469dbcb50ffd7e089,
         type: 3}
