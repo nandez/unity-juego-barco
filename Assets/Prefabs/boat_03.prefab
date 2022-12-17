@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: -3009445449336347489}
   - component: {fileID: 8781442943308099245}
   - component: {fileID: 1829584576184091328}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: boat_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}

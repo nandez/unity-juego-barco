@@ -59,8 +59,12 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] protected List<CannonBall> cannonBallPrefabs; // Prefabs de balas de cañon
     private CannonBall currentCannonBall; // Bala de cañon actual para disparar
 
+    private MapManager mapManager; // Referencia al MapManager
+
     void Start()
     {
+        mapManager = FindObjectOfType<MapManager>();
+
         limiteVelocidadInicial = limiteVelocidad;
 
         // Inicializamos el prefab del proyectil que se usará para disparar..
@@ -99,8 +103,15 @@ public class PlayerMovementController : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Mouse0))
             {
-                PuntoHit = Hit.point;                                            //guardo el punto que choco en una variable llamada PuntoHit
-                Move = true;                                                     // el jugador podra moverse
+                // Obtenemos la dimensión del mapa..
+                var (mapBottomLeft, mapTopRight) = mapManager.GetMapBounds();
+
+                if(Hit.point.x >= mapBottomLeft.x && Hit.point.x <= mapTopRight.x
+                    && Hit.point.z >= mapBottomLeft.y && Hit.point.z <= mapTopRight.y)
+                {
+                    PuntoHit = Hit.point;                                            //guardo el punto que choco en una variable llamada PuntoHit
+                    Move = true;                                                     // el jugador podra moverse
+                }
             }
             else if(Input.GetKey(KeyCode.Mouse1))
             {
