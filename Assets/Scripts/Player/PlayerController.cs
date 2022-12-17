@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour
     // Component References
     protected HealthController healthCtrl;
 
-    public UnityAction OnPlayerDeath; // Evento que se invoca cuando el jugador muere.
+    //public UnityAction OnPlayerDeath; // Evento que se invoca cuando el jugador muere.
+    //public UnityAction OnPlayerHealthUpdate; // Evento que se invoca cuando el jugador muere.
 
     void Start()
     {
@@ -26,7 +27,7 @@ public class PlayerController : MonoBehaviour
         // TODO: animación de muerte, sonido de muerte, etc.
 
         // Cuando el jugador muere, invocamos el evento OnPlayerDeath.
-        OnPlayerDeath?.Invoke();
+        //OnPlayerDeath?.Invoke();
 
         // Destruimos el objeto..
         Destroy(gameObject, 0.2f);
@@ -34,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnHealthUpdatedHandler(int currentHitPoints, int maxHitPoints)
     {
-        // Actualizamos la barra de vida.
+        // Actualizamos la barra de vida que está encima del jugador.
         healthBarCtrl?.UpdateValue(currentHitPoints, maxHitPoints);
     }
 }
