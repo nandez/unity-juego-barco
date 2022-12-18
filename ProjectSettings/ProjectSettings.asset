@@ -769,6 +769,7 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
     Standalone: POSEIDON;POSEIDON_URP
+    WebGL: POSEIDON;POSEIDON_URP
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
