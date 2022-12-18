@@ -19,7 +19,7 @@ public class CannonController : MonoBehaviour
     [SerializeField] protected Transform cannonPivot;
     [Range(0, 90)][SerializeField] protected float fireAngle = 35f; // Indica el ángulo de disparo
     [SerializeField] protected float rotationSpeed = 5f; // Indica la velocidad de rotación del cañon.
-
+    [SerializeField] protected float damageMultiplier = 1f; // Indica el multiplicador de daño del cañon.
 
     [Header("CoolDown Settings")]
     [SerializeField] protected bool showCooldownBar = true; // Indica si mostrar o no la barra de cooldown
@@ -67,6 +67,7 @@ public class CannonController : MonoBehaviour
 
             // Instanciamos el proyectil y le aplicamos una fuerza de impulso
             var projectile = CannonBall.Instantiate(projectilePrefab, cannonFirePoint.position, Quaternion.identity, owner);
+            projectile.SetDamageMultiplier(damageMultiplier);
 
             // Deshabilitamos la colisión entre el proyectil y su propietario.
             Physics.IgnoreCollision(projectile.GetComponent<Collider>(), owner.GetComponent<Collider>(), true);

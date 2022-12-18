@@ -4,9 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - PlayerRightSide
-  - PlayerLeftSide
-  - Island
+  - Water
   layers:
   - Default
   - TransparentFX

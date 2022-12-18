@@ -502,6 +502,11 @@ PrefabInstance:
       propertyPath: followCamera
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4391292585613051704, guid: 8dcc249223aa1134eb5ef6b9c0e1c7fc,
+        type: 3}
+      propertyPath: showTrajectory
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7135901938884565638, guid: 8dcc249223aa1134eb5ef6b9c0e1c7fc,
         type: 3}
       propertyPath: m_RootOrder

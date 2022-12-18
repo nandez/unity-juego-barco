@@ -36,8 +36,6 @@ public class BaseEnemy : MonoBehaviour
     // Protected Fields
     protected GameObject player; // Referencia al jugador.
 
-
-
     void Start()
     {
         Initialize();

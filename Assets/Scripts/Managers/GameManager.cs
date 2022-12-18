@@ -123,8 +123,8 @@ public class GameManager : MonoBehaviour
         gameOver = true;
         scoreMenuTimeText.text = $"Tiempo de Juego: {timerText.text}";
         scoreMenuEnemy1Text.text = $"Enemigos Tipo 1 -- {enemiesDestroyed[typeof(EnemyType1)]}";
-        scoreMenuEnemy1Text.text = $"Enemigos Tipo 2 -- {enemiesDestroyed[typeof(EnemyType2)]}";
-        scoreMenuEnemy1Text.text = $"Enemigos Tipo 3 -- {enemiesDestroyed[typeof(EnemyType3)]}";
+        scoreMenuEnemy2Text.text = $"Enemigos Tipo 2 -- {enemiesDestroyed[typeof(EnemyType2)]}";
+        scoreMenuEnemy3Text.text = $"Enemigos Tipo 3 -- {enemiesDestroyed[typeof(EnemyType3)]}";
 
         Time.timeScale = 0;
         OnGameOver?.Invoke();
