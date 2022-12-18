@@ -7,7 +7,7 @@ public class CannonBall : MonoBehaviour
     [SerializeField] protected float lifeTime;
     [SerializeField] protected int damage;
     [SerializeField] protected string waterTag;
-    [SerializeField] protected LayerMask waterLayer;
+    [SerializeField] protected GameObject explosionParticlesPrefab;
 
     public GameObject Owner { get; protected set; }
 
@@ -27,10 +27,12 @@ public class CannonBall : MonoBehaviour
         if (col.gameObject.TryGetComponent<HealthController>(out var healthCtrl))
             healthCtrl.TakeDamage(damage, Owner);
 
+        // Instanciamos un objeto con la animación de la explosión.
+        var explosionFx = Instantiate(explosionParticlesPrefab, transform.position, Quaternion.identity);
+        explosionFx.GetComponent<ParticleSystem>().Play();
 
-        // TODO: Puede ser interesante que la bala de cañon explote al impactar.
+        // Destruimos la bala de cañon.
         Destroy(gameObject);
-
     }
 
     void OnTriggerEnter(Collider col)

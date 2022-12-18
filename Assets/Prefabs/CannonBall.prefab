@@ -130,6 +130,5 @@ MonoBehaviour:
   lifeTime: 10
   damage: 5
   waterTag: Water
-  waterLayer:
-    serializedVersion: 2
-    m_Bits: 64
+  explosionParticlesPrefab: {fileID: 5458131835664221558, guid: d5e9f0ac27dec2643af77460fc9284b6,
+    type: 3}
