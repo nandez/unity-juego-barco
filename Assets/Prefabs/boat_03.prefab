@@ -227,7 +227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8679067168332796063}
   - component: {fileID: -3009445449336347489}
-  - component: {fileID: 8781442943308099245}
+  - component: {fileID: 104686545876433580}
   - component: {fileID: 1829584576184091328}
   m_Layer: 8
   m_Name: boat_03
@@ -270,7 +270,7 @@ MonoBehaviour:
   rewardPoints: 20
   healthBarCtrl: {fileID: 680228524173328242}
   fleeRange: 25
---- !u!114 &8781442943308099245
+--- !u!114 &104686545876433580
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -279,11 +279,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8302928210736908837}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b6f7217ad434a44fa49f2e8200f9923, type: 3}
+  m_Script: {fileID: 11500000, guid: d8d946a1a16786d479c46a976396b5f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHitpoints: 10
   destroyOnDeath: 0
+  playerTag: Player
 --- !u!65 &1829584576184091328
 BoxCollider:
   m_ObjectHideFlags: 0

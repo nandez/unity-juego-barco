@@ -19,7 +19,7 @@ public class BaseEnemy : MonoBehaviour
 
 
     [Header("Events")]
-    public UnityAction<int> OnEnemyDestroyed; // Evento que se invoca cuando el enemigo es destruido.
+    public UnityAction<EnemyDestroyedEventArgs> OnEnemyDestroyed; // Evento que se invoca cuando el enemigo es destruido.
 
     [Header("References")]
     [SerializeField] protected BarController healthBarCtrl; // Referencia al controlador de la barra de vida.
@@ -55,7 +55,11 @@ public class BaseEnemy : MonoBehaviour
     {
         // Cuando el enemigo muere, invocamos el evento OnEnemyDestroyed indicando
         // los puntos de recompensa como parámetro.
-        OnEnemyDestroyed?.Invoke(rewardPoints);
+        OnEnemyDestroyed?.Invoke(new EnemyDestroyedEventArgs()
+        {
+            EnemyType = this.GetType(),
+            RewardPoints = rewardPoints
+        });
 
         // TODO: animación de "hundimiento" (transform.Translate(Vector3.down * Time.deltaTime * 2f)
         // sonido de explosión??

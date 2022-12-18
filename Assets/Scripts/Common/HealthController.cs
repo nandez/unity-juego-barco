@@ -28,12 +28,12 @@ public class HealthController : MonoBehaviour
         Invoke(nameof(UpdateHealth), 0.25f);
     }
 
-    private void UpdateHealth()
+    protected virtual void UpdateHealth()
     {
         OnHealthUpdated?.Invoke(hitPoints, maxHitpoints);
     }
 
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage, GameObject attacker)
     {
         hitPoints -= damage;
         damage = Mathf.Clamp(damage, 0, maxHitpoints);

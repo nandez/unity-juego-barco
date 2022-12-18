@@ -321,7 +321,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8679067168332796063}
   - component: {fileID: -5390707907855072175}
-  - component: {fileID: 6632250025972689435}
+  - component: {fileID: 1683650586723508742}
   - component: {fileID: 1585568658980421275}
   m_Layer: 8
   m_Name: boat_01
@@ -373,7 +373,7 @@ MonoBehaviour:
   - {fileID: 1157413995259974423, guid: c2f1ee7d47fd8a24d8e4b545eb71d0cf, type: 3}
   drawAttackRangeGizmo: 0
   drawTargetGizmo: 0
---- !u!114 &6632250025972689435
+--- !u!114 &1683650586723508742
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -382,11 +382,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8302928210736908837}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b6f7217ad434a44fa49f2e8200f9923, type: 3}
+  m_Script: {fileID: 11500000, guid: d8d946a1a16786d479c46a976396b5f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHitpoints: 25
   destroyOnDeath: 0
+  playerTag: Player
 --- !u!65 &1585568658980421275
 BoxCollider:
   m_ObjectHideFlags: 0

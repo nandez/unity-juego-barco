@@ -66,7 +66,7 @@ public class CannonController : MonoBehaviour
             DisplayTrajectory(target);
 
             // Instanciamos el proyectil y le aplicamos una fuerza de impulso
-            var projectile = Instantiate(projectilePrefab, cannonFirePoint.position, Quaternion.identity);
+            var projectile = CannonBall.Instantiate(projectilePrefab, cannonFirePoint.position, Quaternion.identity, owner);
 
             // Deshabilitamos la colisión entre el proyectil y su propietario.
             Physics.IgnoreCollision(projectile.GetComponent<Collider>(), owner.GetComponent<Collider>(), true);
