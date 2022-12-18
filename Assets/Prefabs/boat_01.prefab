@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 176913457}
   m_Layer: 0
-  m_Name: RRay
+  m_Name: RightSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1377430294}
   m_Layer: 0
-  m_Name: LRay
+  m_Name: LeftSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1681552742}
   m_Layer: 0
-  m_Name: Frontal
+  m_Name: FrontSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,7 +86,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1681552741}
   m_LocalRotation: {x: -0, y: 0.70710576, z: -0, w: 0.7071079}
-  m_LocalPosition: {x: 0, y: 0, z: 6.62}
+  m_LocalPosition: {x: 0.0000076293945, y: 0, z: 4.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -321,7 +321,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8679067168332796063}
   - component: {fileID: -5390707907855072175}
-  - component: {fileID: 6632250025972689435}
+  - component: {fileID: 1683650586723508742}
   - component: {fileID: 1585568658980421275}
   m_Layer: 8
   m_Name: boat_01
@@ -366,6 +366,12 @@ MonoBehaviour:
   turnSpeed: 2
   rewardPoints: 5
   healthBarCtrl: {fileID: 2687388357848290223}
+  rightSensor: {fileID: 176913456}
+  leftSensor: {fileID: 1377430293}
+  forwardSensor: {fileID: 1681552741}
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 896
   attackRange: 25
   minDistanceToPlayer: 10
   cannonCtrl: {fileID: 7554640835239841740}
@@ -373,7 +379,7 @@ MonoBehaviour:
   - {fileID: 1157413995259974423, guid: c2f1ee7d47fd8a24d8e4b545eb71d0cf, type: 3}
   drawAttackRangeGizmo: 0
   drawTargetGizmo: 0
---- !u!114 &6632250025972689435
+--- !u!114 &1683650586723508742
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -382,11 +388,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8302928210736908837}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b6f7217ad434a44fa49f2e8200f9923, type: 3}
+  m_Script: {fileID: 11500000, guid: d8d946a1a16786d479c46a976396b5f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHitpoints: 25
   destroyOnDeath: 0
+  playerTag: Player
 --- !u!65 &1585568658980421275
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -494,6 +501,11 @@ PrefabInstance:
         type: 3}
       propertyPath: followCamera
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391292585613051704, guid: 8dcc249223aa1134eb5ef6b9c0e1c7fc,
+        type: 3}
+      propertyPath: showTrajectory
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7135901938884565638, guid: 8dcc249223aa1134eb5ef6b9c0e1c7fc,
         type: 3}

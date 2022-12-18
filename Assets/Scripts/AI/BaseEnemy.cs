@@ -19,10 +19,16 @@ public class BaseEnemy : MonoBehaviour
 
 
     [Header("Events")]
-    public UnityAction<int> OnEnemyDestroyed; // Evento que se invoca cuando el enemigo es destruido.
+    public UnityAction<EnemyDestroyedEventArgs> OnEnemyDestroyed; // Evento que se invoca cuando el enemigo es destruido.
 
     [Header("References")]
     [SerializeField] protected BarController healthBarCtrl; // Referencia al controlador de la barra de vida.
+
+    [Header("Obstacle Sensors")]
+    [SerializeField] protected GameObject rightSensor;
+    [SerializeField] protected GameObject leftSensor;
+    [SerializeField] protected GameObject forwardSensor;
+    [SerializeField] protected LayerMask obstacleLayers;
 
     // Component References
     protected HealthController healthCtrl; // Referencia al controlador de vida.
@@ -55,7 +61,11 @@ public class BaseEnemy : MonoBehaviour
     {
         // Cuando el enemigo muere, invocamos el evento OnEnemyDestroyed indicando
         // los puntos de recompensa como parámetro.
-        OnEnemyDestroyed?.Invoke(rewardPoints);
+        OnEnemyDestroyed?.Invoke(new EnemyDestroyedEventArgs()
+        {
+            EnemyType = this.GetType(),
+            RewardPoints = rewardPoints
+        });
 
         // TODO: animación de "hundimiento" (transform.Translate(Vector3.down * Time.deltaTime * 2f)
         // sonido de explosión??
@@ -66,5 +76,59 @@ public class BaseEnemy : MonoBehaviour
     {
         // Cuando el enemigo recibe daño, actualizamos la barra de vida.
         healthBarCtrl?.UpdateValue(currentHitPoints, maxHitPoints);
+    }
+
+    protected virtual void Move(Vector3 direction, float speedFactor)
+    {
+        Vector3 destination = direction;
+        Vector3 forwardView = forwardSensor.transform.position - transform.position;
+        Vector3 rightObstaclePoint = Vector3.zero;
+        Vector3 leftObstaclePoint = Vector3.zero;
+        var right = false;
+        var left = false;
+
+        Debug.DrawRay(transform.position, destination, Color.red, 0);
+        Debug.DrawRay(rightSensor.transform.position - forwardView.normalized, (forwardView.normalized + (rightSensor.transform.position - transform.position) / 2) * 7);
+        if (Physics.Raycast(rightSensor.transform.position - forwardView.normalized, forwardView.normalized + (rightSensor.transform.position - transform.position) / 2, out var rightHitInfo, 7, obstacleLayers))
+        {
+            rightObstaclePoint = rightHitInfo.point;
+            right = true;
+        }
+
+        Debug.DrawRay(leftSensor.transform.position - forwardView.normalized, (forwardView.normalized + (leftSensor.transform.position - transform.position) / 2) * 7);
+        if (Physics.Raycast(leftSensor.transform.position - forwardView.normalized, forwardView.normalized + (leftSensor.transform.position - transform.position) / 2, out var leftHitInfo, 7, obstacleLayers))
+        {
+            leftObstaclePoint = leftHitInfo.point;
+            left = true;
+        }
+
+        if (right && left)
+        {
+            var distanceToRightObstacle = (rightObstaclePoint - transform.position).magnitude;
+            var distanceToLeftObstacle = (leftObstaclePoint - transform.position).magnitude;
+
+            if (distanceToRightObstacle < distanceToLeftObstacle)
+                destination = rightObstaclePoint.normalized + (leftSensor.transform.position - transform.position).normalized * 3;
+
+            if (distanceToRightObstacle > distanceToLeftObstacle)
+                destination = leftObstaclePoint.normalized + (rightSensor.transform.position - transform.position).normalized * 3;
+        }
+        else if (right && !left)
+        {
+            destination = rightObstaclePoint.normalized + (leftSensor.transform.position - transform.position).normalized * 3;
+        }
+        else if (!right && left)
+        {
+            destination = leftObstaclePoint.normalized + (rightSensor.transform.position - transform.position).normalized * 3;
+        }
+        else
+        {
+            destination = direction;
+        }
+
+        // Rotamos y movemos al enemigo
+        var rotation = Quaternion.LookRotation(destination); // crea una variable rotation y le asigna la rotacion de Sentido
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, turnSpeed * speedFactor * Time.deltaTime); // transforma la rotacion del jugador suavemente
+        transform.position += transform.forward * speed * speedFactor * Time.deltaTime;
     }
 }
