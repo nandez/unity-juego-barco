@@ -11,8 +11,12 @@ public class CannonBall : MonoBehaviour
 
     public GameObject Owner { get; protected set; }
 
+    protected Rigidbody rbComponent;
+
     void Start()
     {
+        rbComponent = GetComponent<Rigidbody>();
+
         // Destruimos el objeto una vez cumplido el tiempo de vida.
         Destroy(gameObject, lifeTime);
     }
@@ -36,8 +40,7 @@ public class CannonBall : MonoBehaviour
             // Si colisiona con el agua, le quitamos la velocidad para
             // que no siga avanzando con la misma trayectoria, en su lugar dejamos que la gravedad
             // simule que la bala de cañon se hunde en el mar.
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-
+            rbComponent.velocity = Vector3.zero;
         }
     }
 
