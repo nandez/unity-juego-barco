@@ -58,43 +58,30 @@ public class EnemyType1 : BaseEnemy
             // Mientras la distancia entre el jugador y el enemigo sea mayor que minDistanceToPlayer,
             // reducimos la velocidad de movimiento y de rotación, y nos movemos en dirección al jugador.
             var newDirection = (player.transform.position - transform.position);
-            var newRotation = Quaternion.LookRotation(newDirection);
 
             // El factor de reducción de velocidad lo calculamos en base a la distancia desde el jugador
             var reductionSpeedFactor = Mathf.Lerp(0f, 1f, (newDirection.magnitude - minDistanceToPlayer) / (attackRange - minDistanceToPlayer));
 
-            // Si la distancia es menor que 0.001f, no nos movemos y evitamos
-            // valores extremadamente pequeños que pueden ocasioanr cosas raras...
+            // Si el valod de reducción es muy pequeño, lo seteamos en 0
+            // para evitar valores que pueden ocasionar cosas raras...
             if (reductionSpeedFactor < 0.001f)
                 reductionSpeedFactor = 0f;
 
-            transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, turnSpeed * reductionSpeedFactor * Time.deltaTime);
-            transform.position += newDirection.normalized * speed * reductionSpeedFactor * Time.deltaTime;
+            Move(newDirection, reductionSpeedFactor);
         }
 
         // Determinamos el punto donde queremos que el proyectil impacte.
         var spreadArea = Random.insideUnitCircle;
         target = player.transform.position + (player.transform.forward * Random.Range(0, 3f)) + new Vector3(spreadArea.x, player.transform.position.y, spreadArea.y) * Random.Range(1, 2f);
 
-        // Llamamos al método Fire del cañon para disparar el proyectil cuando esté listo.
+        // Llamamos al método SetTarget del cañon para disparar el proyectil cuando esté listo.
         cannonCtrl.SetTarget(currentCannonBall, target, gameObject);
     }
 
     private void ChasePlayer()
     {
-        // Calculamos el vector dirección entre el enemigo y el jugador.
-        var direction = player.transform.position - transform.position;
-
-        // Rotamos en dirección al jugador
-        var rotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, turnSpeed * Time.deltaTime);
-
-        // Movemos al enemigo en esa dirección.
-        transform.position += direction.normalized * speed * Time.deltaTime;
-
-        // TODO: tener en cuenta que pueden existir obstaculos en el camino;
-        // proyectar con un raycast si existe colisión con algun obstaculo
-        // antes de realizar el movimiento.
+        // Calculamos el vector dirección entre el enemigo y el jugador y nos movemos con velocidad normal..
+        Move(player.transform.position - transform.position, 1f);
     }
 
     private void OnDrawGizmos()

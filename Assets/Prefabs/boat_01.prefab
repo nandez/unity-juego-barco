@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 176913457}
   m_Layer: 0
-  m_Name: RRay
+  m_Name: RightSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1377430294}
   m_Layer: 0
-  m_Name: LRay
+  m_Name: LeftSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1681552742}
   m_Layer: 0
-  m_Name: Frontal
+  m_Name: FrontSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,7 +86,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1681552741}
   m_LocalRotation: {x: -0, y: 0.70710576, z: -0, w: 0.7071079}
-  m_LocalPosition: {x: 0, y: 0, z: 6.62}
+  m_LocalPosition: {x: 0.0000076293945, y: 0, z: 4.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -366,6 +366,12 @@ MonoBehaviour:
   turnSpeed: 2
   rewardPoints: 5
   healthBarCtrl: {fileID: 2687388357848290223}
+  rightSensor: {fileID: 176913456}
+  leftSensor: {fileID: 1377430293}
+  forwardSensor: {fileID: 1681552741}
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 896
   attackRange: 25
   minDistanceToPlayer: 10
   cannonCtrl: {fileID: 7554640835239841740}

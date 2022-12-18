@@ -33,17 +33,7 @@ public class EnemyType3 : BaseEnemy
         var direction = transform.position - player.transform.position;
         direction.y = 0;
 
-        // Rotamos en dirección contraria al jugador
-        var rotation = Quaternion.LookRotation(direction.normalized);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, turnSpeed * Time.deltaTime);
-
-        // Movemos al enemigo en esa dirección.
-        var destination = direction.normalized * speed * Time.deltaTime;
-        transform.position += destination;
-
-        // TODO: tener en cuenta que pueden existir obstaculos en el camino;
-        // proyectar con un raycast si existe colisión con algun obstaculo
-        // antes de realizar el movimiento.
+        Move(direction, 1f);
     }
 
     void OnDrawGizmos()
